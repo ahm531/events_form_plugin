@@ -1,13 +1,11 @@
 from typing import TYPE_CHECKING
 
-if TYPE_CHECKING:
-    from nomad.datamodel.datamodel import EntryArchive
-    from structlog.stdlib import BoundLogger
+# if TYPE_CHECKING:
+#     from nomad.datamodel.datamodel import EntryArchive
+#     from structlog.stdlib import BoundLogger
 
 from nomad.config import config
-from nomad.metainfo import (
-    Quantity, MSection, SubSection, MEnum, SchemaPackage
-)
+from nomad.metainfo import MEnum, MSection, Quantity, SchemaPackage, SubSection
 from nomad.metainfo.metainfo import Datetime
 
 # Access plugin configuration
@@ -23,7 +21,8 @@ class Applicant(MSection):
     """Section 1.1 — Applicant details"""
     name = Quantity(type=str, description='Applicant full name')
     email = Quantity(type=str, description='Applicant email address')
-    role_at_fairmat = Quantity(type=str, description='Role in FAIRmat (PI, Postdoc, etc.)')
+    role_at_fairmat = Quantity(type=str, description=
+                               'Role in FAIRmat (PI, Postdoc, etc.)')
     areas = Quantity(
         type=str, shape=['*'],
         description='FAIRmat Areas involved (A–G)'
@@ -58,13 +57,16 @@ class EventOverview(MSection):
     format = Quantity(type=MEnum('In-person', 'Hybrid', 'Online'))
     city_country = Quantity(type=str)
     planned_dates = Quantity(type=str)
-    description = Quantity(type=str, description='Brief description and relevance to FAIRmat')
+    description = Quantity(type=str,
+                           description='Brief description and relevance to FAIRmat')
 
 
 class OrganizerInfo(MSection):
     """Section 2.2 — Organizer information"""
-    fairmat_organizers = Quantity(type=str, description='FAIRmat-affiliated organizers with Areas and emails')
-    non_fairmat_organizers = Quantity(type=str, description='Non-FAIRmat organizers and affiliations')
+    fairmat_organizers = Quantity(type=str, description=
+                                  'FAIRmat-affiliated organizers with Areas and emails')
+    non_fairmat_organizers = Quantity(type=str, description=
+                                      'Non-FAIRmat organizers and affiliations')
     lead_contact = Quantity(type=str, description='Lead contact person')
 
 
@@ -83,7 +85,8 @@ class PredictedCosts(MSection):
     accommodation = Quantity(type=bool)
     travel_costs = Quantity(type=bool)
     other = Quantity(type=bool)
-    details = Quantity(type=str, description='Describe provided support (e.g. “lunch for 30 people”)')
+    details = Quantity(type=str, description=
+                       'Describe provided support (e.g. “lunch for 30 people”)')
 
 
 class AreaFSupport(MSection):
@@ -123,7 +126,8 @@ class EventRequestForm(MSection):
 
     event_overview = SubSection(section_def=EventOverview, description='Section 2.1')
     organizer_info = SubSection(section_def=OrganizerInfo, description='Section 2.2')
-    participant_info = SubSection(section_def=ParticipantInfo, description='Section 2.3')
+    participant_info = SubSection(section_def=ParticipantInfo, description=
+                                  'Section 2.3')
     predicted_costs = SubSection(section_def=PredictedCosts, description='Section 2.4')
     area_f_support = SubSection(section_def=AreaFSupport, description='Section 2.5')
 
