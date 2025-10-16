@@ -1,26 +1,23 @@
-from typing import (
-    TYPE_CHECKING,
-)
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from nomad.datamodel.datamodel import (
-        EntryArchive,
-    )
-    from structlog.stdlib import (
-        BoundLogger,
-    )
+    from nomad.datamodel.datamodel import EntryArchive
+    from structlog.stdlib import BoundLogger
 
 from nomad.config import config
-from nomad.datamodel.data import Schema
-from nomad.datamodel.metainfo.annotations import ELNAnnotation, ELNComponentEnum
-from nomad.metainfo import Quantity, SchemaPackage
+from nomad.metainfo import (
+    Quantity, MSection, SubSection, MEnum, SchemaPackage
+)
+from nomad.metainfo.metainfo import Datetime
 
+# Access plugin configuration
 configuration = config.get_plugin_entry_point(
     'fairmat_events_form.schema_packages:schema_package_entry_point'
 )
 
-m_package = SchemaPackage()
-
+# -----------------------------
+# Define schema sections
+# -----------------------------
 
 class Applicant(MSection):
     """Section 1.1 — Applicant details"""
@@ -134,6 +131,10 @@ class EventRequestForm(MSection):
     evaluation = SubSection(section_def=EvaluationSection, description='Section 4')
 
 
+# -----------------------------
+# Schema package registration
+# -----------------------------
 m_package = SchemaPackage()
-m_package.__name__ = "FAIRmat Event Form"
+m_package.__name__ = 'FAIRmat Event Form'
 m_package.add_section(EventRequestForm)
+m_package.__init_metainfo__()
