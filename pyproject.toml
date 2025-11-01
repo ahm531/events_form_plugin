@@ -112,7 +112,7 @@ where = ["src"]
 
 [project.entry-points.'nomad.plugin']
 
-schema_package_entry_point = "fairmat_events_form.schema_packages:schema_package_entry_point"
+fairmat_events_form = "fairmat_events_form.schema_packages:schema_events_entry_point"
 
 
 
