@@ -175,13 +175,13 @@ class ApplicantInformation(Entity, Schema):
     )
 
     event_details = SubSection(
-    section_def='eventInformation',
+    section_def='EventInformation',
     description='',
     repeats=True,
     )
 
     expected_expenses = SubSection(
-    section_def='eventExpenses',
+    section_def='EventExpenses',
     description='',
     repeats=True,
     )
