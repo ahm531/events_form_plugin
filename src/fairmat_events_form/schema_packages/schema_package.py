@@ -1,25 +1,16 @@
-import time
 from typing import TYPE_CHECKING
 
 from nomad.config import config
 from nomad.datamodel.data import ArchiveSection, Schema, UseCaseElnCategory
-from nomad.metainfo import MEnum, Quantity, SchemaPackage
 from nomad.datamodel.metainfo.annotations import ELNAnnotation, ELNComponentEnum
 from nomad.datamodel.metainfo.basesections import (
-    BaseSection,
     Entity,
-    EntityReference,
 )
-from nomad.metainfo.metainfo import Section, SubSection, Datetime, Category
-
+from nomad.metainfo import MEnum, Quantity, SchemaPackage
+from nomad.metainfo.metainfo import Datetime, Section, SubSection
 
 if TYPE_CHECKING:
-    from nomad.datamodel.datamodel import (
-        EntryArchive,
-    )
-    from structlog.stdlib import (
-        BoundLogger,
-    )
+    pass
 
 # Access plugin configuration
 configuration = config.get_plugin_entry_point(
@@ -32,80 +23,80 @@ m_package = SchemaPackage()
 # Define schema sections
 # -----------------------------
 
-class eventExpenses (ArchiveSection):
+class EventExpenses(ArchiveSection):
     """
     A subsection for providing the expected costs associated with the event.
     """
 
-    Travel_Expenses_Description = Quantity(
+    travel_expenses_description = Quantity(
         type=str,
         a_eln=ELNAnnotation(component=ELNComponentEnum.StringEditQuantity),
         description='Costs associated to traveling to the conference venue'
         )
     
-    Travel_Expenses_Amount = Quantity(
+    travel_expenses_amount = Quantity(
         type=float,
         a_eln=ELNAnnotation(component=ELNComponentEnum.NumberEditQuantity),
         description='Costs associated to traveling to the event venue'
         )
 
-    Accommodation_Expenses_Description = Quantity(
+    accommodation_expenses_description = Quantity(
         type=str,
         a_eln=ELNAnnotation(component=ELNComponentEnum.StringEditQuantity),
         description='Costs associated to accommodation at the event city'
         )
-    Accommodation_Expenses_Amount = Quantity(
+    accommodation_expenses_amount = Quantity(
         type=float,
         a_eln=ELNAnnotation(component=ELNComponentEnum.NumberEditQuantity),
         description='Costs associated to accommodation at the event city'
         )
 
-    Other_Expenses_Description = Quantity(
+    other_expenses_description = Quantity(
         type=str,
         a_eln=ELNAnnotation(component=ELNComponentEnum.StringEditQuantity),
         description='Other costs associated with the event'
         )
-    Other_Expenses_Amount = Quantity(
+    other_expenses_amount = Quantity(
         type=float,
         a_eln=ELNAnnotation(component=ELNComponentEnum.NumberEditQuantity),
         description='Other costs associated with the event'
         )
 
-class eventInformation(ArchiveSection):
+class EventInformation(ArchiveSection):
     """
     An Entry for requesting an approval to attend an external event.
     """
 
-    Event_name = Quantity(
+    event_name = Quantity(
         type=str,
         a_eln=ELNAnnotation(component=ELNComponentEnum.StringEditQuantity),
         description='The Name of the event'
         )
     
-    Event_website = Quantity(
+    event_website = Quantity(
         type=str,
         a_eln=ELNAnnotation(component=ELNComponentEnum.URLEditQuantity),
         description='Event Website'
         )
 
-    Event_Organizer_or_Host = Quantity(
+    event_organizer_or_host = Quantity(
         type=str,
         a_eln=ELNAnnotation(component=ELNComponentEnum.StringEditQuantity),
         description='Name of the organizing entity or host'
     )
 
-    Location= Quantity(
+    location= Quantity(
         type=str,
         a_eln=ELNAnnotation(component=ELNComponentEnum.StringEditQuantity),
         description='Event Website'
         )
     
-    Event_start_date = Quantity(
+    event_start_date = Quantity(
         type=Datetime,
         a_eln=ELNAnnotation(component=ELNComponentEnum.DateEditQuantity)
         )
     
-    Event_end_date = Quantity(
+    event_end_date = Quantity(
         type=Datetime,
         a_eln=ELNAnnotation(component=ELNComponentEnum.DateEditQuantity)
         )
@@ -119,7 +110,7 @@ class eventInformation(ArchiveSection):
         description='Applicant FAIRmat Area'
     )
 
-    Participation_type = Quantity(
+    participation_type = Quantity(
         type=MEnum(
             'Invited talk',
             'Contributed talk/poster',
@@ -130,14 +121,14 @@ class eventInformation(ArchiveSection):
         a_eln=ELNAnnotation(component=ELNComponentEnum.EnumEditQuantity),
         description='Applicant FAIRmat Area'
     )
-    Title_of_contribution = Quantity(
+    title_of_contribution = Quantity(
         type=str,
         a_eln=ELNAnnotation(component=ELNComponentEnum.StringEditQuantity),
         description='Applicant FAIRmat Area'
     )
 
 
-class applicant_information(Entity, Schema):
+class ApplicantInformation(Entity, Schema):
     """
     An Entry for requesting an approval to attend an external event.
     """
@@ -146,19 +137,19 @@ class applicant_information(Entity, Schema):
         label='Event Participation',
         categories=[UseCaseElnCategory]
     )
-    Name = Quantity(
+    name = Quantity(
         type=str,
         a_eln=ELNAnnotation(component=ELNComponentEnum.StringEditQuantity),
         description='Applicant full name'
         )
     
-    Email = Quantity(
+    email = Quantity(
         type=str,
         a_eln=ELNAnnotation(component=ELNComponentEnum.StringEditQuantity),
         description='Applicant Email'
         )
 
-    Role_at_fairmat = Quantity(
+    role_at_fairmat = Quantity(
         type=MEnum(
             'Principal Investigator',
             'Coordinator',
@@ -169,7 +160,7 @@ class applicant_information(Entity, Schema):
         description='Role in FAIRmat'
     )
 
-    FAIRmat_Area = Quantity(
+    fairmat_area = Quantity(
         type=MEnum(
             'A: Synthesis',
             'B: Experiments',
@@ -183,13 +174,13 @@ class applicant_information(Entity, Schema):
         description='Applicant FAIRmat Area'
     )
 
-    Even_Details = SubSection(
+    event_details = SubSection(
     section_def='eventInformation',
     description='',
     repeats=True,
     )
 
-    Expected_Expenses = SubSection(
+    expected_expenses = SubSection(
     section_def='eventExpenses',
     description='',
     repeats=True,
