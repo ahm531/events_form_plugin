@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 from nomad.config import config
-from nomad.datamodel.data import ArchiveSection, Schema, UseCaseElnCategory
+from nomad.datamodel.data import ArchiveSection, Schema, UseCaseElnCategory, EntryData
 from nomad.datamodel.metainfo.annotations import ELNAnnotation, ELNComponentEnum
 from nomad.datamodel.metainfo.basesections import (
     Entity,
@@ -11,6 +11,11 @@ from nomad.metainfo.metainfo import Datetime, Section, SubSection
 
 if TYPE_CHECKING:
     pass
+
+
+
+
+
 
 # Access plugin configuration
 configuration = config.get_plugin_entry_point(
@@ -22,6 +27,30 @@ m_package = SchemaPackage()
 # -----------------------------
 # Define schema sections
 # -----------------------------
+class RequestStatus(ArchiveSection):
+    """
+    A subsection for updating the status of the request - to be used only by 
+    the Outreach and Adminstration admins.
+    """
+
+    status = Quantity(
+        type=MEnum(
+            'Under review',
+            'Approved',
+            'Rejected',
+        ),
+        a_eln=ELNAnnotation(component=ELNComponentEnum.EnumEditQuantity),
+        description='what is the current status of the request'
+        )
+    
+    reimbursement_source = Quantity(
+        type=MEnum(
+            'HU',
+            'FAIR-DI',
+        ),
+        a_eln=ELNAnnotation(component=ELNComponentEnum.EnumEditQuantity),
+        description='How will the event expenses be covered'
+        )
 
 class EventExpenses(ArchiveSection):
     """
@@ -61,6 +90,19 @@ class EventExpenses(ArchiveSection):
         a_eln=ELNAnnotation(component=ELNComponentEnum.NumberEditQuantity),
         description='Other costs associated with the event'
         )
+    total_expenses = Quantity(
+        type=float,
+        description='Automatically calculated total expenses',
+    )
+
+    def normalize(self, archive, logger):
+        """
+        Compute total expenses automatically during normalization.
+        """
+        travel = self.travel_expenses_amount or 0
+        accom = self.accommodation_expenses_amount or 0
+        other = self.other_expenses_amount or 0
+        self.total_expenses = travel + accom + other
 
 class EventInformation(ArchiveSection):
     """
@@ -128,19 +170,23 @@ class EventInformation(ArchiveSection):
     )
 
 
-class ApplicantInformation(Entity, Schema):
+class ApplicantInformation(Schema):
     """
     An Entry for requesting an approval to attend an external event.
     """
 
     m_def = Section(
-        label='Event Participation',
-        categories=[UseCaseElnCategory]
+        label='Event Participation Request',
+        categories=[UseCaseElnCategory],
     )
-    name = Quantity(
+
+    
+    full_name = Quantity(
         type=str,
         a_eln=ELNAnnotation(component=ELNComponentEnum.StringEditQuantity),
-        description='Applicant full name'
+        description='Requestor full name',
+        default='FirstName LastName',
+        label='Full Name'
         )
     
     email = Quantity(
@@ -148,7 +194,12 @@ class ApplicantInformation(Entity, Schema):
         a_eln=ELNAnnotation(component=ELNComponentEnum.StringEditQuantity),
         description='Applicant Email'
         )
-
+    
+    submission_date = Quantity(
+        type=Datetime,
+        a_eln=dict(component='DateTimeEditQuantity'),
+        description='Date of submission'
+        )
     role_at_fairmat = Quantity(
         type=MEnum(
             'Principal Investigator',
@@ -175,15 +226,22 @@ class ApplicantInformation(Entity, Schema):
     )
 
     event_details = SubSection(
-    section_def='EventInformation',
+    section_def=EventInformation,
     description='',
-    repeats=True,
+    repeats=False,
     )
 
     expected_expenses = SubSection(
     section_def='EventExpenses',
     description='',
-    repeats=True,
+    repeats=False,
+    )
+
+    status = SubSection(
+    section_def='RequestStatus',
+    label='Status - To be filled only by Outreach and Adminstration admins',
+    description='',
+    repeats=False,
     )
 
 
