@@ -8,4 +8,14 @@ def test_schema_package():
     entry_archive = parse(test_file)[0]
     normalize_all(entry_archive)
 
-    assert entry_archive.data.name == 'Markus'
+    data = entry_archive.data
+
+    # ✅ Updated field names to match current schema
+    assert data.full_name == 'Markus'
+    assert data.email == 'markus@example.com'
+    assert data.role_at_fairmat == 'Coordinator'
+    assert data.fairmat_area == 'F: Outreach'
+
+    # ✅ Optional: check normalization created a summary or total_expenses
+    assert hasattr(data, 'summary')
+    assert hasattr(data, 'total_expenses')
