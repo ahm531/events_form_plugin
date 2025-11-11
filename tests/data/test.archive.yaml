@@ -1,25 +1,31 @@
 data:
   m_def: fairmat_events_form.schema_packages.schema_package.ApplicantInformation
-  name: Markus
+  full_name: Markus
   email: markus@example.com
   role_at_fairmat: Coordinator
   fairmat_area: "F: Outreach"
 
   event_details:
-    - event_name: FAIRmat Project Meeting
-      event_website: https://www.fairmat-nfdi.eu/event/46
-      event_organizer_or_host: FAIRmat
-      location: Berlin, Germany
-      event_start_date: 2024-11-25T09:00:00
-      event_end_date: 2024-11-27T17:00:00
-      Attendance_method: In-person
-      participation_type: Invited talk
-      title_of_contribution: FAIR Data Infrastructure for Materials Science
+    event_name: FAIRmat Project Meeting
+    event_website: https://www.fairmat-nfdi.eu/event/46
+    event_organizer_or_host: FAIRmat
+    location: Berlin, Germany
+    event_start_date: 2024-11-25T09:00:00
+    event_end_date: 2024-11-27T17:00:00
+    Attendance_method: In-person
+    participation_type: Invited talk
+    title_of_contribution: FAIR Data Infrastructure for Materials Science
 
   expected_expenses:
-    - travel_expenses_description: Train ticket Berlin–Hamburg
-      travel_expenses_amount: 120.0
-      accommodation_expenses_description: Hotel near venue (2 nights)
-      accommodation_expenses_amount: 250.0
+    - m_def: fairmat_events_form.schema_packages.schema_package.TransportationExpenses
+      travel_method: Train
+      travel_cost: 120.0
+
+    - m_def: fairmat_events_form.schema_packages.schema_package.AccommodationExpenses
+      accomodation_duration: 2
+      accommodation_cost: 250.0
+      accommodation_justification: Hotel near venue (2 nights)
+
+    - m_def: fairmat_events_form.schema_packages.schema_package.OtherExpenses
       other_expenses_description: Local transport and meals
-      other_expenses_amount: 80.0
+      other_cost: 80.0
