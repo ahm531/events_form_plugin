@@ -15,13 +15,15 @@ schema = 'fairmat_events_form.schema_packages.schema_package.ApplicantInformatio
 
 events_request_app_entry_point = AppEntryPoint(
     name = 'Events Requests App',
-    description = 'This app is to track the submitted events requests by FAIRmat members',
+    description = 'This app is to track the submitted\
+          events requests by FAIRmat members',
     app = App(
         label='Events Requests',
         path='eventsapp',
         category='Use Cases',
         description='Track the events requests from FAIRmat members',
-        search_quantities=SearchQuantities(include=[f'data.*#{schema}', f'metadata.*#{schema}']),
+        search_quantities=SearchQuantities(
+            include=[f'data.*#{schema}', f'metadata.*#{schema}']),
         columns=[
             Column(
                 quantity=f'data.full_name#{schema}',
