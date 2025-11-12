@@ -1,26 +1,27 @@
 from nomad.config.models.plugins import AppEntryPoint
 from nomad.config.models.ui import (
     App,
+    Axis,
     Column,
+    Dashboard,
+    Layout,
     Menu,
     MenuItemTerms,
     SearchQuantities,
+    WidgetHistogram,
 )
 
-schema = 'fairmat_events_form.schema_packages.\
-    schema_package.ApplicantInformation'
+schema = 'fairmat_events_form.schema_packages.schema_package.ApplicantInformation'
 
 events_request_app_entry_point = AppEntryPoint(
     name = 'Events Requests App',
-    description = 'This app is to track the submitted events \
-        requests by FAIRmat members',
+    description = 'This app is to track the submitted events requests by FAIRmat members',
     app = App(
         label='Events Requests',
         path='eventsapp',
         category='Use Cases',
         description='Track the events requests from FAIRmat members',
-        search_quantities=SearchQuantities(include=[f'data.*#{schema}',\
-                                                     f'metadata.*#{schema}']),
+        search_quantities=SearchQuantities(include=[f'data.*#{schema}', f'metadata.*#{schema}']),
         columns=[
             Column(
                 quantity=f'data.full_name#{schema}',
@@ -88,7 +89,29 @@ events_request_app_entry_point = AppEntryPoint(
                     ]
                 )
             ]
-        )
+        ),
+        dashboard=Dashboard(
+            widgets=[
+                WidgetHistogram(
+                    title='Event Expenses',
+                    autorange=True,
+                    nbins=30,
+                    scale='linear',
+                    x=Axis(search_quantity=f'data.total_expenses#{schema}',
+                           title='Total cost (€)'),
+                    layout={'lg': Layout(minH=4, minW=6, h=4, w=6, y=0, x=0)},
+                ),
+                WidgetHistogram(
+                    title='Submission date',
+                    autorange=True,
+                    nbins=30,
+                    scale='linear',
+                    x=Axis(search_quantity=f'data.submission_date#{schema}',
+                           title='Date'),
+                    layout={'lg': Layout(minH=4, minW=6, h=4, w=6, y=0, x=6)},
+                ),
+                 ]
+        ),
         
         )
 )
