@@ -198,7 +198,7 @@ class EventInformation(ArchiveSection):
         a_eln=ELNAnnotation(component=ELNComponentEnum.DateEditQuantity)
         )
 
-    Attendance_method = Quantity(
+    attendance_method = Quantity(
         type=MEnum(
             'In-person',
             'Virtual',
